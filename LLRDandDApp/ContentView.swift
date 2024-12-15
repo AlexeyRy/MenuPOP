@@ -9,6 +9,16 @@ import SwiftUI
 
 struct ContentView: View {
     
+    @Environment(\.managedObjectContext) private var viewContext
+    /*
+     
+     @FetchRequest(
+             sortDescriptors: [NSSortDescriptor(keyPath: \Dish.name, ascending: true)],
+             animation: .default
+         )
+     
+     */
+    
     @EnvironmentObject var router: Router
     @EnvironmentObject var themeManager: ThemeManager
     @State var maxPrice: Double = 60
@@ -22,7 +32,11 @@ struct ContentView: View {
                                             isAlcogolic: "",
                                             withsugar: "")
     
+    
+    
     var body: some View {
+        
+        
         
         let filterDishes = FilterForFood(allFood, maxPrice)
         // фильтруем карточки по цене

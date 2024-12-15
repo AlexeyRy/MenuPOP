@@ -20,18 +20,19 @@ final class Router: ObservableObject{
     func navigate(to destination: Screen = .homeScreen) {
         self.currentScreen = destination
         switch destination.self {
-                case .homeScreen:
-                    currentTopBarData = DataForTopBarMenu()
-                case .settingsScreen:
-                    currentTopBarData = DataForTopBarSettings()
-                case .filtreationScreen:
-                    currentTopBarData = DataForTopBarFiltration()
-                case .information:
-                    currentTopBarData = DataForTopBarInfo()
-                }
+        case .homeScreen:
+            currentTopBarData = DataForTopBarMenu()
+        case .settingsScreen:
+            currentTopBarData = DataForTopBarSettings()
+        case .filtreationScreen:
+            currentTopBarData = DataForTopBarFiltration()
+        case .information:
+            currentTopBarData = DataForTopBarInfo()
+        }
     }
-    
+
     // Функция для смены категории
+    
     func changeCategory(choose category: Category){
         self.dishesCategory = category
         print(category)

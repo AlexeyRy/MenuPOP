@@ -20,6 +20,10 @@
 		F6995A452D04090C00F96976 /* LLRDandDAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6995A442D04090C00F96976 /* LLRDandDAppUITestsLaunchTests.swift */; };
 		F6995A522D0418CC00F96976 /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6995A512D0418CC00F96976 /* Protocols.swift */; };
 		F6995A542D04362A00F96976 /* TopBarStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6995A532D04362A00F96976 /* TopBarStruct.swift */; };
+		F69D3C8B2D0EF0580026DF31 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F69D3C892D0EF0580026DF31 /* Model.xcdatamodeld */; };
+		F69D3C8D2D0F00F70026DF31 /* Dishes+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69D3C8C2D0F00F70026DF31 /* Dishes+extension.swift */; };
+		F69D3C8F2D0F04DE0026DF31 /* Category+extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69D3C8E2D0F04DE0026DF31 /* Category+extension.swift */; };
+		F69D3C912D0F156C0026DF31 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = F69D3C902D0F156C0026DF31 /* Persistence.swift */; };
 		F6E425902D07D6E500931180 /* CustomStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E4258F2D07D6E500931180 /* CustomStyle.swift */; };
 		F6E425952D07DA0800931180 /* SettingsStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6E425942D07DA0800931180 /* SettingsStruct.swift */; };
 /* End PBXBuildFile section */
@@ -58,6 +62,10 @@
 		F6995A442D04090C00F96976 /* LLRDandDAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LLRDandDAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		F6995A512D0418CC00F96976 /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		F6995A532D04362A00F96976 /* TopBarStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarStruct.swift; sourceTree = "<group>"; };
+		F69D3C8A2D0EF0580026DF31 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		F69D3C8C2D0F00F70026DF31 /* Dishes+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Dishes+extension.swift"; sourceTree = "<group>"; };
+		F69D3C8E2D0F04DE0026DF31 /* Category+extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Category+extension.swift"; sourceTree = "<group>"; };
+		F69D3C902D0F156C0026DF31 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		F6E4258F2D07D6E500931180 /* CustomStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStyle.swift; sourceTree = "<group>"; };
 		F6E425942D07DA0800931180 /* SettingsStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsStruct.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -118,6 +126,10 @@
 				F66014662D05A4F4000E6CBD /* Router.swift */,
 				F6E4258F2D07D6E500931180 /* CustomStyle.swift */,
 				F6995A2B2D04090B00F96976 /* Assets.xcassets */,
+				F69D3C892D0EF0580026DF31 /* Model.xcdatamodeld */,
+				F69D3C8C2D0F00F70026DF31 /* Dishes+extension.swift */,
+				F69D3C8E2D0F04DE0026DF31 /* Category+extension.swift */,
+				F69D3C902D0F156C0026DF31 /* Persistence.swift */,
 				F6995A2D2D04090B00F96976 /* Preview Content */,
 			);
 			path = LLRDandDApp;
@@ -289,7 +301,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F69D3C8F2D0F04DE0026DF31 /* Category+extension.swift in Sources */,
 				F683C7972D0930E5008A0411 /* SectionStruct.swift in Sources */,
+				F69D3C8D2D0F00F70026DF31 /* Dishes+extension.swift in Sources */,
+				F69D3C912D0F156C0026DF31 /* Persistence.swift in Sources */,
 				F6E425952D07DA0800931180 /* SettingsStruct.swift in Sources */,
 				F6E425902D07D6E500931180 /* CustomStyle.swift in Sources */,
 				F6995A522D0418CC00F96976 /* Protocols.swift in Sources */,
@@ -298,6 +313,7 @@
 				F66014672D05A4F4000E6CBD /* Router.swift in Sources */,
 				F6995A542D04362A00F96976 /* TopBarStruct.swift in Sources */,
 				F660146D2D068247000E6CBD /* FilterStruct.swift in Sources */,
+				F69D3C8B2D0EF0580026DF31 /* Model.xcdatamodeld in Sources */,
 				F6995A282D04090500F96976 /* LLRDandDAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -628,6 +644,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		F69D3C892D0EF0580026DF31 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				F69D3C8A2D0EF0580026DF31 /* Model.xcdatamodel */,
+			);
+			currentVersion = F69D3C8A2D0EF0580026DF31 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = F6995A1C2D04090500F96976 /* Project object */;
 }

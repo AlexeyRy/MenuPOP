@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 struct DataStructForTopBar{
     let title: String
@@ -129,6 +130,20 @@ struct SettingsData: DataDelegateForScreen{
 
 
 // Создаём единную структуру для обьектов меню
+/*@objc(DishTest)
+public class DishTest: NSManagedObject{
+    @NSManaged public let dishesCategory: Category
+    let name: String
+    let price: Double
+    let ingridients: [String]
+    let peculiarity: String
+    let isHot: String
+    let isAlcogolic: String
+    let withsugar: String
+    
+    let id = UUID()
+}*/
+
 struct Dishes: Identifiable{
     
     let dishesCategory: Category
