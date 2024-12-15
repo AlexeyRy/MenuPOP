@@ -343,53 +343,53 @@ struct SectionDessertStructData: DataDelegateForScreen{
 struct DataMainFoodsOnli: DataDelgatForCards{
     var content: [Dishes]
     func fetchData() -> [Dishes] {
-        var MainDishes: [Dishes] = []
+        var mainDishes: [Dishes] = []
         for item in content{
             if(item.dishesCategory == .mainFood){
-                MainDishes.append(item)
+                mainDishes.append(item)
             }
         }
-        print(MainDishes)
-        return MainDishes
+        print(mainDishes)
+        return mainDishes
     }
 }
 
 struct DataDrinksOnli: DataDelgatForCards{
     var content: [Dishes]
     func fetchData() -> [Dishes] {
-        var MainDishes: [Dishes] = []
+        var drinks: [Dishes] = []
         for item in content{
             if(item.dishesCategory == .drinks){
-                MainDishes.append(item)
+                drinks.append(item)
             }
         }
-        print(MainDishes)
-        return MainDishes
+        print(drinks)
+        return drinks
     }
 }
 
 struct DataDessertsOnli: DataDelgatForCards{
     var content: [Dishes]
     func fetchData() -> [Dishes] {
-        var MainDishes: [Dishes] = []
+        var desserts: [Dishes] = []
         for item in content{
             if(item.dishesCategory == .desserts){
-                MainDishes.append(item)
+                desserts.append(item)
             }
         }
-        print(MainDishes)
-        return MainDishes
+        print(desserts)
+        return desserts
     }
 }
 
 struct DataForInfoScreen{
-    let nameForPicher: String
+    let nameForPicture: String
     let nameForButton: String
 }
 
 struct ContentForInfoPage: DataDelegateForScreen{
     func fetchData() -> DataForInfoScreen {
-        return DataForInfoScreen(nameForPicher: "LittleLemonLogo",
+        return DataForInfoScreen(nameForPicture: "LittleLemonLogo",
                                  nameForButton: "Back To Main")
     }
 }

@@ -110,12 +110,12 @@ struct InfoDisplay: DisplayableDelegateMulti{
     @ObservedObject var viewModel: InformationViewModel
     
     func BuildView(cardContent: Dishes, content: DataForInfoScreen) -> some View {
-        let IngridientsList = Combining(cardContent.ingridients)
-        let Pecu = cardContent.isHot + cardContent.isAlcogolic + cardContent.withsugar
+        let ingridientsList = Combining(cardContent.ingridients)
+        let peculiarity = cardContent.isHot + cardContent.isAlcogolic + cardContent.withsugar
         
         return ZStack{
             VStack{
-                Image(content.nameForPicher)
+                Image(content.nameForPicture)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 400, height: 400)
@@ -124,8 +124,8 @@ struct InfoDisplay: DisplayableDelegateMulti{
                 VStack(alignment: .leading){
                     Text("Name: \(cardContent.name)")
                     Text("Price: \(String(format: "%.2f", cardContent.price))$")
-                    Text("\(cardContent.peculiarity): \(Pecu)")
-                    Text("ingredients: \(IngridientsList)")
+                    Text("\(cardContent.peculiarity): \(peculiarity)")
+                    Text("ingredients: \(ingridientsList)")
                 }.padding()
                     .fontWeight(.bold)
                     .customText()
