@@ -9,7 +9,8 @@ import Foundation
 import CoreData
 
 @objc(DishCategory)
-public class DishCategory: NSManagedObject{
-    @NSManaged var name: String
+public class DishCategory: NSManagedObject {
+    @NSManaged public var name: String?
+    @NSManaged public var toDish: NSSet?
 }
 

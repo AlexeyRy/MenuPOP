@@ -12,18 +12,30 @@ struct LLRDandDAppApp: App {
     
     @StateObject private var router = Router()
     @StateObject private var themeManger = ThemeManager()
+    @StateObject private var categoryManager = CategoryManager()
+    let dishes = DishesViewModel(fetchedResults: nil)
     
     let persistenceController = PersistenceController.shared
     
-    init(){
-        Dish.buildDishes(persistenceController.container.viewContext)
+    init(){ // Проверяем на наличие обьектов в базе, если база пустаю создаём стартовые объекты
+        let context = persistenceController.container.viewContext
+        
+        do{
+            let result = try context.fetch(Dish.fetchRequest())
+            if result.isEmpty{
+                Dish.buildDishes(persistenceController.container.viewContext)
+            }
+        }catch{
+            print("Ошибка при загрузке данных \(error.localizedDescription)")
+        }
     }
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(viewModel: dishes)
                 .environmentObject(router)
                 .environmentObject(themeManger)
+                .environmentObject(categoryManager)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
             
         }

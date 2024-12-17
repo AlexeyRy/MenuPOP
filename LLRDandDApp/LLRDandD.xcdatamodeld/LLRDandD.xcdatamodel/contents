@@ -7,10 +7,10 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="peculiarity" optional="YES" attributeType="String"/>
         <attribute name="price" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
-        <relationship name="fromDishCategory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DishCategory" inverseName="toDish" inverseEntity="DishCategory"/>
+        <relationship name="fromDishCategory" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="DishCategory" inverseName="toDosh" inverseEntity="DishCategory"/>
     </entity>
     <entity name="DishCategory" representedClassName="DishCategory" syncable="YES">
         <attribute name="name" optional="YES" attributeType="String"/>
-        <relationship name="toDish" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Dish" inverseName="fromDishCategory" inverseEntity="Dish"/>
+        <relationship name="toDosh" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Dish" inverseName="fromDishCategory" inverseEntity="Dish"/>
     </entity>
 </model>

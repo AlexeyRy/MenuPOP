@@ -11,9 +11,9 @@ import SwiftUI
 ///Реализуем Секционные карты и распределение обьектов
 // Структура, которая собирает отображения из полученных делегатов. В нашем кейсе их три. Делегат отображения, делегат даты для карт, делегат контента самой секции
 
-struct Section<Delegate: DisplayableDelegateMulti, Data: DataDelegateForScreen>: View where Delegate.Content == [Dishes], Delegate.Content2 == Data.DataType{
+struct Section<Delegate: DisplayableDelegateMulti, Data: DataDelegateForScreen>: View where Delegate.Content == [Dish], Delegate.Content2 == Data.DataType{
     let dataDelegatFoSection: Data
-    let dataDelegatForCards: DataDelgatForCards
+    let dataDelegatForCards: DataDelgatForCardsCore
     
     let displayDelegate: Delegate
     
@@ -31,7 +31,7 @@ struct Section<Delegate: DisplayableDelegateMulti, Data: DataDelegateForScreen>:
 struct SectionDisplay: DisplayableDelegateMulti{
     @ObservedObject var viewModel: SectionViewMod
     
-    func BuildView(cardContent: [Dishes], content: String) -> some View {
+    func BuildView(cardContent: [Dish], content: String) -> some View {
         ZStack{
             VStack(alignment: .leading){
                 Text(content)
@@ -49,7 +49,7 @@ struct SectionDisplay: DisplayableDelegateMulti{
                             viewModel.tapOnInfo()
                         } , label: {
                             ZStack{
-                                    Text(item.name)
+                                Text(item.name ?? "Unknown")
                                         .foregroundColor(.white)
                                         .fontWeight(.bold)
                                 
@@ -72,11 +72,11 @@ struct SectionDisplay: DisplayableDelegateMulti{
 // Модель функций страницы. В ней мы создаём два обьекта. Это биндиговую переменную для подсасывания даты для последующей передачи в навигации и функционал переключения между экранами
 final class SectionViewMod: ObservableObject{
     
-    @Binding var currentDish: Dishes
+    @Binding var currentDish: Dish?
     let tapOnInfo: () -> Void
     
     init(tapOnInfo: @escaping () -> Void,
-         currentDish: Binding<Dishes>) {
+         currentDish: Binding<Dish?>) {
         self.tapOnInfo = tapOnInfo
         self._currentDish = currentDish
     }
@@ -90,7 +90,7 @@ final class SectionViewMod: ObservableObject{
 ///
 
 // Структура что общается с тремя делегатамами, делегат контента на самой странице, делегат отображения и делагат что даёт дату из секции для коректоного отображения данных конкретной карты, при использовании роутера
-struct Info<Delegate: DisplayableDelegateMulti, Data: DataDelegateForScreen>: View where Delegate.Content == Dishes, Delegate.Content2 == Data.DataType{
+struct Info<Delegate: DisplayableDelegateMulti, Data: DataDelegateForScreen>: View where Delegate.Content == Dish, Delegate.Content2 == Data.DataType{
     
     let dataDelegatFoSection: Data
     let dataDelegatForCards: DataDelgatForDishInfo
@@ -109,9 +109,8 @@ struct Info<Delegate: DisplayableDelegateMulti, Data: DataDelegateForScreen>: Vi
 struct InfoDisplay: DisplayableDelegateMulti{
     @ObservedObject var viewModel: InformationViewModel
     
-    func BuildView(cardContent: Dishes, content: DataForInfoScreen) -> some View {
-        let ingridientsList = Combining(cardContent.ingridients)
-        let peculiarity = cardContent.isHot + cardContent.isAlcogolic + cardContent.withsugar
+    func BuildView(cardContent: Dish, content: DataForInfoScreen) -> some View {
+        // let ingridientsList = Combining(cardContent.ingridiens ?? [""])
         
         return ZStack{
             VStack{
@@ -122,10 +121,10 @@ struct InfoDisplay: DisplayableDelegateMulti{
                     .padding(.bottom, 20)
                 
                 VStack(alignment: .leading){
-                    Text("Name: \(cardContent.name)")
+                    Text("Name: \(cardContent.name ?? "Unknown")")
                     Text("Price: \(String(format: "%.2f", cardContent.price))$")
-                    Text("\(cardContent.peculiarity): \(peculiarity)")
-                    Text("ingredients: \(ingridientsList)")
+                    Text("\(cardContent.peculiarity ?? "Unknown"): \(cardContent.isPeculiarity ?? "Unknown")")
+                    Text("ingredients: \(cardContent.ingridiens ?? "Unknown")")
                 }.padding()
                     .fontWeight(.bold)
                     .customText()

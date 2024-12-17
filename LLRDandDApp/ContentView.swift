@@ -10,35 +10,22 @@ import SwiftUI
 struct ContentView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
-    /*
-     
-     @FetchRequest(
-             sortDescriptors: [NSSortDescriptor(keyPath: \Dish.name, ascending: true)],
-             animation: .default
-         )
-     
-     */
+    @FetchRequest(entity: Dish.entity(),
+                  sortDescriptors: [NSSortDescriptor(keyPath: \Dish.name, ascending: true)]) private var dishItems: FetchedResults<Dish>
+    @StateObject var viewModel: DishesViewModel
     
     @EnvironmentObject var router: Router
+    @EnvironmentObject var categotyManager: CategoryManager
     @EnvironmentObject var themeManager: ThemeManager
+    
     @State var maxPrice: Double = 60
-    @State var currentDish: Dishes = Dishes(dishesCategory: .all,
-                                            Title: "",
-                                            name: "",
-                                            price: 0.00,
-                                            ingridients: [""],
-                                            peculiarity: "",
-                                            isHot: "",
-                                            isAlcogolic: "",
-                                            withsugar: "")
-    
-    
+    @State var currentDish: Dish?
     
     var body: some View {
+
         
-        
-        
-        let filterDishes = FilterForFood(allFood, maxPrice)
+        let filterDishCore = FilterForFoodCore(viewModel.dishes, maxPrice)
+        //let filterDishes = FilterForFood(allFood, maxPrice)
         // фильтруем карточки по цене
         
         let topBarViewModel = TopBarViewModel(
@@ -54,12 +41,12 @@ struct ContentView: View {
         
         // передаём поведение кнопок в пременную и в последсвии в меню фильтрации. Так же передаём биндинг для изменения прайса, а так же сохздаём переменную, которая ослеживает выбранную категорию для динамического изменения интерфейса в окне фильтрации
         let filterViewModel = FilterViewModel(
-            isButtonChoosed: router.dishesCategory,
+            isButtonChoosed: categotyManager.currentDishesCategory ?? .all,
             maxPrice: $maxPrice,
-            chooseCategoryOfDishesAll: {router.changeCategory(choose: .all)},
-            chooseCategoryOfDishesMain: {router.changeCategory(choose: .mainFood)},
-            chooseCategoryOfDishesDrinks: {router.changeCategory(choose: .drinks)},
-            chooseCategoryOfDishesDesserts: {router.changeCategory(choose: .desserts)},
+            chooseCategoryOfDishesAll: {categotyManager.changeCategory(to: .all)},
+            chooseCategoryOfDishesMain: {categotyManager.changeCategory(to: .mainFood)},
+            chooseCategoryOfDishesDrinks: {categotyManager.changeCategory(to: .drinks)},
+            chooseCategoryOfDishesDesserts: {categotyManager.changeCategory(to: .desserts)},
             backToMain: {router.navigate(to: .homeScreen)}
         )
         
@@ -100,7 +87,7 @@ struct ContentView: View {
                             
                             NavigationLink(destination: Info(
                                 dataDelegatFoSection: ContentForInfoPage(),
-                                dataDelegatForCards: DishCardData(DishInfoForSrcreen: currentDish),
+                                dataDelegatForCards: DishCardData(DishInfoForSrcreen: currentDish ?? Dish()),
                                 displayDelegate: InfoDisplay(viewModel: informationViewModel)
                             ),
                                            tag: .information,
@@ -110,26 +97,26 @@ struct ContentView: View {
                             
                             
                             ScrollView{
-                                if router.dishesCategory == .all || router.dishesCategory == .mainFood{
+                                if categotyManager.currentDishesCategory == .all || categotyManager.currentDishesCategory == .mainFood{
                                     Section(dataDelegatFoSection: SectionMainStructData(),
                                             dataDelegatForCards: DataMainFoodsOnli(
-                                                content: filterDishes),
+                                                content: filterDishCore),
                                             displayDelegate: SectionDisplay(
                                                 viewModel: sectionViewModel)
                                     )
                                 }
-                                if router.dishesCategory == .all || router.dishesCategory == .drinks{
+                                if categotyManager.currentDishesCategory == .all || categotyManager.currentDishesCategory == .drinks{
                                     Section(dataDelegatFoSection: SectionDkinksStructData(),
                                             dataDelegatForCards: DataDrinksOnli(
-                                                content: filterDishes),
+                                                content: filterDishCore),
                                             displayDelegate: SectionDisplay(
                                                 viewModel: sectionViewModel)
                                     )
                                 }
-                                if router.dishesCategory == .all || router.dishesCategory == .desserts{
+                                if categotyManager.currentDishesCategory == .all || categotyManager.currentDishesCategory == .desserts{
                                     Section(dataDelegatFoSection: SectionDessertStructData(),
                                             dataDelegatForCards: DataDessertsOnli(
-                                                content: filterDishes),
+                                                content: filterDishCore),
                                             displayDelegate: SectionDisplay(
                                                 viewModel: sectionViewModel)
                                     )
@@ -141,23 +128,21 @@ struct ContentView: View {
                             .customBack()
                     }
                     Spacer()
-                }.frame(maxWidth: .infinity, maxHeight: .infinity)
+                }.onAppear {viewModel.updateDishes(with: dishItems)}
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             .ignoresSafeArea()
             .customBack()
     }
 }
 
-#Preview {
-
-    ContentView(currentDish: Dishes(dishesCategory: .all,
-                                    Title: "",
-                                    name: "",
-                                    price: 0.00,
-                                    ingridients: [""],
-                                    peculiarity: "",
-                                    isHot: "",
-                                    isAlcogolic: "",
-                                    withsugar: ""))
-        .environmentObject(Router())
-        .environmentObject(ThemeManager())
-}
+/*
+ #Preview {
+ let persistenceController = PersistenceController.shared
+ 
+ ContentView()
+ .environmentObject(Router())
+ .environmentObject(ThemeManager())
+ .environment(\.managedObjectContext, persistenceController.container.viewContext)
+ }
+*/
+ 

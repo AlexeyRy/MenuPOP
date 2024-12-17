@@ -91,248 +91,6 @@ struct SettingsData: DataDelegateForScreen{
     }
 }
 
-
-
-//final class Dishes: Identifiable{
-//
-//    let dishesCategory: Category
-/*
-    let id = UUID()
-    let name: String
-    let price: Double
-    let ingridients: [String]
-    let peculiarity: String
-    let isHot: String
-    let isAlcogolic: String
-    let withsugar: String
-    
-    init(dishesCategory: Category,
-         name: String,
-         price: Double,
-         ingridients: [String],
-         peculiarity: String,
-         isHot: String,
-         isAlcogolic: String,
-         withsugar: String) {
-        self.dishesCategory = dishesCategory
-        self.name = name
-        self.price = price
-        self.ingridients = ingridients
-        self.peculiarity = peculiarity
-        self.isHot = isHot
-        self.isAlcogolic = isAlcogolic
-        self.withsugar = withsugar
-    }
-}
- */
-
-
-
-
-// Создаём единную структуру для обьектов меню
-/*@objc(DishTest)
-public class DishTest: NSManagedObject{
-    @NSManaged public let dishesCategory: Category
-    let name: String
-    let price: Double
-    let ingridients: [String]
-    let peculiarity: String
-    let isHot: String
-    let isAlcogolic: String
-    let withsugar: String
-    
-    let id = UUID()
-}*/
-
-struct Dishes: Identifiable{
-    
-    let dishesCategory: Category
-    
-    let id = UUID()
-    let Title: String
-    let name: String
-    let price: Double
-    let ingridients: [String]
-    let peculiarity: String
-    let isHot: String
-    let isAlcogolic: String
-    let withsugar: String
-    
-}
-// Создаём обьект структуры
-let allFood = [
-    Dishes(dishesCategory: .mainFood,
-           Title: "Main Food",
-           name: "Fried Chicken",
-           price: 6.66,
-           ingridients: ["Chicken", "oil", "salt"],
-           peculiarity: "Type of dish",
-           isHot: "Hot",
-           isAlcogolic: "",
-           withsugar: ""
-          ),
-    Dishes(dishesCategory: .mainFood,
-           Title: "Main Food",
-           name: "Fried Chicken",
-           price: 20,
-           ingridients: ["Chicken", "oil", "salt"],
-           peculiarity: "Type of dish",
-           isHot: "Hot",
-           isAlcogolic: "",
-           withsugar: ""
-          ),
-    Dishes(dishesCategory: .mainFood,
-           Title: "Main Food",
-           name: "Fried Chicken",
-           price: 15,
-           ingridients: ["Chicken", "oil", "salt"],
-           peculiarity: "Type of dish",
-           isHot: "Hot",
-           isAlcogolic: "",
-           withsugar: ""
-          ),
-    Dishes(dishesCategory: .mainFood,
-           Title: "Main Food",
-           name: "Fried Chicken",
-           price: 2,
-           ingridients: ["Chicken", "oil", "salt"],
-           peculiarity: "Type of dish",
-           isHot: "Hot",
-           isAlcogolic: "",
-           withsugar: ""
-          ),
-    Dishes(dishesCategory: .mainFood,
-           Title: "Main Food",
-           name: "Fried Chicken",
-           price: 30,
-           ingridients: ["Chicken", "oil", "salt"],
-           peculiarity: "Type of dish",
-           isHot: "Hot",
-           isAlcogolic: "",
-           withsugar: ""
-          ),
-    Dishes(dishesCategory: .mainFood,
-           Title: "Main Food",
-           name: "Fried Chicken",
-           price: 10,
-           ingridients: ["Chicken", "oil", "salt"],
-           peculiarity: "Type of dish",
-           isHot: "Hot",
-           isAlcogolic: "",
-           withsugar: ""
-          ),
-    Dishes(dishesCategory: .mainFood,
-           Title: "Main Food",
-           name: "Super Pasta",
-           price: 9.99,
-           ingridients: ["Chicken", "oil", "salt"],
-           peculiarity: "Type of dish",
-           isHot: "Hot",
-           isAlcogolic: "",
-           withsugar: ""
-          ),
-    Dishes(dishesCategory: .drinks,
-           Title: "Drinks",
-           name: "Marrrgarita",
-           price: 23,
-           ingridients: ["Chicken", "oil", "salt"],
-           peculiarity: "Availability of alcohol",
-           isHot: "",
-           isAlcogolic: "Yes",
-           withsugar: ""
-          ),
-    Dishes(dishesCategory: .drinks,
-           Title: "Drinks",
-           name: "Pivo",
-           price: 1.5,
-           ingridients: ["Chicken", "oil", "salt"],
-           peculiarity: "Availability of alcohol",
-           isHot: "",
-           isAlcogolic: "No",
-           withsugar: ""
-          ),
-    Dishes(dishesCategory: .drinks,
-           Title: "Drinks",
-           name: "Pivo",
-           price: 1.5,
-           ingridients: ["Chicken", "oil", "salt"],
-           peculiarity: "Availability of alcohol",
-           isHot: "",
-           isAlcogolic: "No",
-           withsugar: ""
-          ),
-    Dishes(dishesCategory: .drinks,
-           Title: "Drinks",
-           name: "Pivo",
-           price: 1.5,
-           ingridients: ["Chicken", "oil", "salt"],
-           peculiarity: "Availability of alcohol",
-           isHot: "",
-           isAlcogolic: "No",
-           withsugar: ""
-          ),
-    Dishes(dishesCategory: .drinks,
-           Title: "Drinks",
-           name: "Pivo",
-           price: 1.5,
-           ingridients: ["Chicken", "oil", "salt"],
-           peculiarity: "Availability of alcohol",
-           isHot: "",
-           isAlcogolic: "No",
-           withsugar: ""
-          ),
-    Dishes(dishesCategory: .desserts,
-           Title: "Dessert",
-           name: "Affogato",
-           price: 9.50,
-           ingridients: ["Chicken", "oil", "salt"],
-           peculiarity: "Sugar free",
-           isHot: "",
-           isAlcogolic: "",
-           withsugar: "Yes"
-          ),
-    Dishes(dishesCategory: .desserts,
-           Title: "Dessert",
-           name: "Affogato",
-           price: 9.50,
-           ingridients: ["Chicken", "oil", "salt"],
-           peculiarity: "Sugar free",
-           isHot: "",
-           isAlcogolic: "",
-           withsugar: "Yes"
-          ),
-    Dishes(dishesCategory: .desserts,
-           Title: "Dessert",
-           name: "Affogato",
-           price: 9.50,
-           ingridients: ["Chicken", "oil", "salt"],
-           peculiarity: "Sugar free",
-           isHot: "",
-           isAlcogolic: "",
-           withsugar: "Yes"
-          ),
-    Dishes(dishesCategory: .desserts,
-           Title: "Dessert",
-           name: "Affogato",
-           price: 9.50,
-           ingridients: ["Chicken", "oil", "salt"],
-           peculiarity: "Sugar free",
-           isHot: "",
-           isAlcogolic: "",
-           withsugar: "Yes"
-          ),
-    Dishes(dishesCategory: .desserts,
-           Title: "Dessert",
-           name: "Affo",
-           price: 4.20,
-           ingridients: ["Chicken", "oil", "salt"],
-           peculiarity: "Sugar free",
-           isHot: "",
-           isAlcogolic: "",
-           withsugar: "No"
-          )
-]
-
 // Создаём контент для разных вкладок еды
 
 struct SectionMainStructData: DataDelegateForScreen{
@@ -355,43 +113,28 @@ struct SectionDessertStructData: DataDelegateForScreen{
 
 //Обробатываем дату для страницы еды
 
-struct DataMainFoodsOnli: DataDelgatForCards{
-    var content: [Dishes]
-    func fetchData() -> [Dishes] {
-        var mainDishes: [Dishes] = []
-        for item in content{
-            if(item.dishesCategory == .mainFood){
-                mainDishes.append(item)
-            }
-        }
+struct DataMainFoodsOnli: DataDelgatForCardsCore{
+    var content: [Dish]
+    func fetchData() -> [Dish] {
+        let mainDishes = content.filter{$0.fromDishCategory.name == "Main Food"}
         print(mainDishes)
         return mainDishes
     }
 }
 
-struct DataDrinksOnli: DataDelgatForCards{
-    var content: [Dishes]
-    func fetchData() -> [Dishes] {
-        var drinks: [Dishes] = []
-        for item in content{
-            if(item.dishesCategory == .drinks){
-                drinks.append(item)
-            }
-        }
+struct DataDrinksOnli: DataDelgatForCardsCore{
+    var content: [Dish]
+    func fetchData() -> [Dish] {
+        let drinks = content.filter{$0.fromDishCategory.name == "Drinks"}
         print(drinks)
         return drinks
     }
 }
 
-struct DataDessertsOnli: DataDelgatForCards{
-    var content: [Dishes]
-    func fetchData() -> [Dishes] {
-        var desserts: [Dishes] = []
-        for item in content{
-            if(item.dishesCategory == .desserts){
-                desserts.append(item)
-            }
-        }
+struct DataDessertsOnli: DataDelgatForCardsCore{
+    var content: [Dish]
+    func fetchData() -> [Dish] {
+        let desserts = content.filter{$0.fromDishCategory.name == "Desserts"}
         print(desserts)
         return desserts
     }
@@ -411,30 +154,14 @@ struct ContentForInfoPage: DataDelegateForScreen{
 
 struct DishCardData: DataDelgatForDishInfo{
     
-    let DishInfoForSrcreen: Dishes
-    func fetchData() -> Dishes {
+    let DishInfoForSrcreen: Dish
+    func fetchData() -> Dish {
         return DishInfoForSrcreen
     }
 }
 
-func Combining(_ list: [String]) -> String{
-    var result = ""
-    var check = 1
-    
-    for item in list{
-        if check < list.count{
-            result = result  + item + ", "
-            check += 1
-        }else{
-            result = result + item
-        }
-    }
-    
-    return result
-}
-
-func FilterForFood(_ dishes: [Dishes], _ maxPrice: Double) -> [Dishes]{
+func FilterForFoodCore(_ dishes: [Dish], _ maxPrice: Double) -> [Dish]{
+    print(dishes)
     return dishes.filter{ $0.price <= maxPrice }
 }
-
 
