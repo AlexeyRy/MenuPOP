@@ -13,6 +13,7 @@ struct LLRDandDAppApp: App {
     @StateObject private var router = Router()
     @StateObject private var themeManger = ThemeManager()
     @StateObject private var categoryManager = CategoryManager()
+   
     let dishes = DishesViewModel(fetchedResults: nil)
     
     let persistenceController = PersistenceController.shared
@@ -30,9 +31,11 @@ struct LLRDandDAppApp: App {
         }
     }
     
+
+    
     var body: some Scene {
         WindowGroup {
-            ContentView(viewModel: dishes)
+            ContentView(context: persistenceController.container.viewContext)
                 .environmentObject(router)
                 .environmentObject(themeManger)
                 .environmentObject(categoryManager)

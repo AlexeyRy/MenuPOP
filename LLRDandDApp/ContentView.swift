@@ -6,13 +6,20 @@
 //
 
 import SwiftUI
+import CoreData
+import Combine
 
 struct ContentView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
+    
+    /*
     @FetchRequest(entity: Dish.entity(),
                   sortDescriptors: [NSSortDescriptor(keyPath: \Dish.name, ascending: true)]) private var dishItems: FetchedResults<Dish>
+     */
+    
     @StateObject var viewModel: DishesViewModel
+    @StateObject var viewModel2: DishViewModel
     
     @EnvironmentObject var router: Router
     @EnvironmentObject var categotyManager: CategoryManager
@@ -21,10 +28,17 @@ struct ContentView: View {
     @State var maxPrice: Double = 60
     @State var currentDish: Dish?
     
+    init(context: NSManagedObjectContext) {
+        // Инициализация viewModel2 с передачей viewContext
+        _viewModel2 = StateObject(wrappedValue: DishViewModel(context: context))
+        _viewModel = StateObject(wrappedValue: DishesViewModel(fetchedResults: nil))
+        
+    }
+    
     var body: some View {
 
         
-        let filterDishCore = FilterForFoodCore(viewModel.dishes, maxPrice)
+        let filteredDishes = viewModel2.filterDishesByPrice(viewModel2.dishes, by: maxPrice)
         //let filterDishes = FilterForFood(allFood, maxPrice)
         // фильтруем карточки по цене
         
@@ -100,7 +114,7 @@ struct ContentView: View {
                                 if categotyManager.currentDishesCategory == .all || categotyManager.currentDishesCategory == .mainFood{
                                     Section(dataDelegatFoSection: SectionMainStructData(),
                                             dataDelegatForCards: DataMainFoodsOnli(
-                                                content: filterDishCore),
+                                                content: filteredDishes),
                                             displayDelegate: SectionDisplay(
                                                 viewModel: sectionViewModel)
                                     )
@@ -108,7 +122,7 @@ struct ContentView: View {
                                 if categotyManager.currentDishesCategory == .all || categotyManager.currentDishesCategory == .drinks{
                                     Section(dataDelegatFoSection: SectionDkinksStructData(),
                                             dataDelegatForCards: DataDrinksOnli(
-                                                content: filterDishCore),
+                                                content: filteredDishes),
                                             displayDelegate: SectionDisplay(
                                                 viewModel: sectionViewModel)
                                     )
@@ -116,7 +130,7 @@ struct ContentView: View {
                                 if categotyManager.currentDishesCategory == .all || categotyManager.currentDishesCategory == .desserts{
                                     Section(dataDelegatFoSection: SectionDessertStructData(),
                                             dataDelegatForCards: DataDessertsOnli(
-                                                content: filterDishCore),
+                                                content: filteredDishes),
                                             displayDelegate: SectionDisplay(
                                                 viewModel: sectionViewModel)
                                     )
@@ -128,11 +142,49 @@ struct ContentView: View {
                             .customBack()
                     }
                     Spacer()
-                }.onAppear {viewModel.updateDishes(with: dishItems)}
+                }.onAppear {viewModel2.fetchDishes()}
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             .ignoresSafeArea()
             .customBack()
     }
+}
+
+class DishViewModel: ObservableObject{
+    @Published var dishes: [Dish] = []
+    @Published var filteredDishes: [Dish] = []
+    
+    private let context: NSManagedObjectContext
+    
+    init(context: NSManagedObjectContext) {
+        self.context = context
+        fetchDishes()
+    }
+    
+    func fetchDishes(){
+        let request: NSFetchRequest<Dish> = Dish.fetchRequest() as! NSFetchRequest<Dish>
+        request.predicate = NSPredicate(value: true)
+
+        do{
+            dishes = try context.fetch(request)
+            filteredDishes = dishes
+            
+        }catch{
+            print("Error fetching dishes: \(error)")
+        }
+    }
+
+    func filterDishesByPrice(_ dishes: [Dish], by maxPrice: Double) -> [Dish]{
+        return dishes.filter{$0.price <= maxPrice}
+    }
+    
+    func filterDishesByName(_ dishes: [Dish], byText serchingText: String = "") -> [Dish]{
+        if serchingText == ""{
+            return dishes
+        }else{
+            return dishes.filter{$0.name?.localizedCaseInsensitiveContains(serchingText) ?? false}
+        }
+    }
+
 }
 
 /*
