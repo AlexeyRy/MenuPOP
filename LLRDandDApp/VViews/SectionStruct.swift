@@ -45,6 +45,7 @@ struct SectionDisplay: DisplayableDelegateMulti{
                     ForEach(cardContent, id: \.id){item in
                         
                         Button(action:{
+                            UIApplication.shared.endEditing(true)
                             viewModel.currentDish = item
                             viewModel.tapOnInfo()
                         } , label: {
