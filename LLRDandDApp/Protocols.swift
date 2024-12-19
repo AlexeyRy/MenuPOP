@@ -37,12 +37,13 @@ protocol DataDelegatForTopBarOnli{
 // Чтобы изменять состояние верхнего топ бара в моменте, мы соединяем передачу данным с конкретным скрином в роутере. Но делаем это не на прямую я через обёртку, которая находится в протоколе. Обёртка в это случае нужна для того, что работать с ассоциальным тип Data прокола. Поэтому мы создаём обёртку, которая так или иначе меняет тип передоваемой даты. Но при этом открывая его так как топ бар ждёт на ход данные стринга
 
 
-protocol DataDelgatForCards{
-    func fetchData() -> [Dishes]
+protocol DataDelgatForCardsCore{
+    func fetchData() -> [Dish]
 }
 
+
 protocol DataDelgatForDishInfo{
-    func fetchData() -> Dishes
+    func fetchData() -> Dish
 }
 
 protocol DisplayableDelegate{
