@@ -56,7 +56,7 @@ struct SectionDisplay: DisplayableDelegateMulti{
                                 
                                     
                                 }.frame(width: 100, height: 100)
-                                    .background(.gray)
+                                    .customBackgroundForObjects()
                                     .cornerRadius(10)
                                     .padding(.bottom, 20)
                             

@@ -13,9 +13,7 @@ struct LLRDandDAppApp: App {
     @StateObject private var router = Router()
     @StateObject private var themeManger = ThemeManager()
     @StateObject private var categoryManager = CategoryManager()
-   
-    let dishes = DishesViewModel(fetchedResults: nil)
-    
+       
     let persistenceController = PersistenceController.shared
     
     init(){ // Проверяем на наличие обьектов в базе, если база пустаю создаём стартовые объекты

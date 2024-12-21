@@ -9,25 +9,6 @@ import Foundation
 import CoreData
 import SwiftUI
 
-
-class DishesViewModel: ObservableObject {
-    @Published var dishes: [Dish] = []
-    
-    private var fetchedResults: FetchedResults<Dish>?
-    
-    init(fetchedResults: FetchedResults<Dish>?) {
-        self.fetchedResults = fetchedResults.map{$0}
-    }
-    
-    func updateDishes(with fetchedResults: FetchedResults<Dish>?) {
-        guard let results = fetchedResults else { return }
-        return dishes = results.map { $0 }
-    }
-}
-
-
-
-
 @objc(Dish)
 public class Dish: NSManagedObject{
     @NSManaged public var name: String?

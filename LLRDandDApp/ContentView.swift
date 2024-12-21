@@ -18,7 +18,6 @@ struct ContentView: View {
                   sortDescriptors: [NSSortDescriptor(keyPath: \Dish.name, ascending: true)]) private var dishItems: FetchedResults<Dish>
      */
     
-    @StateObject var viewModel: DishesViewModel
     @StateObject var dataModel: DishDataModel
     
     @EnvironmentObject var router: Router
@@ -33,8 +32,6 @@ struct ContentView: View {
     init(context: NSManagedObjectContext) {
         // Инициализация viewModel2 с передачей viewContext
         _dataModel = StateObject(wrappedValue: DishDataModel(context: context))
-        _viewModel = StateObject(wrappedValue: DishesViewModel(fetchedResults: nil))
-        
     }
     
     var body: some View {
@@ -43,23 +40,17 @@ struct ContentView: View {
                                                 categotyManager: categotyManager,
                                                 themeManager: themeManager,
                                                 maxPrice: $maxPrice,
-                                                currentDish: $currentDish)
+                                                currentDish: $currentDish,
+                                                allDishes: $dataModel.dishes,
+                                                filteredDishes: $filteredDishes,
+                                                searchingText: $searchText)
         
         
                 VStack {
                     TopBar(dataDelegate: router.currentTopBarData,
                            displayableDelegate: TopBarDisplayableDelegate(viewModel: contentViewModel.topBarViewModel))
                     
-                    TextField("Поиск по меню...", text: $searchText)
-                                        .textFieldStyle(RoundedBorderTextFieldStyle())
-                                        .padding()
-                                        .onChange(of: searchText) { _ in
-                                            if searchText.isEmpty {
-                                                        filteredDishes = dataModel.dishes
-                                            } else {
-                                                        filteredDishes = contentViewModel.filterDishesByName(dataModel.dishes, byText: searchText)
-                                            }
-                                        }
+                    
 
                     NavigationView{
                         ZStack{
@@ -90,36 +81,43 @@ struct ContentView: View {
                                            selection: $router.currentScreen,
                                            label: {})
                             
-                            
-                            
-                            ScrollView{
-                                if categotyManager.currentDishesCategory == .all || categotyManager.currentDishesCategory == .mainFood{
-                                    Section(dataDelegatFoSection: SectionMainStructData(),
-                                            dataDelegatForCards: DataMainFoodsOnli(
-                                                content: filteredDishes),
-                                            displayDelegate: SectionDisplay(
-                                                viewModel: contentViewModel.sectionViewModel)
-                                    )
-                                }
-                                if categotyManager.currentDishesCategory == .all || categotyManager.currentDishesCategory == .drinks{
-                                    Section(dataDelegatFoSection: SectionDkinksStructData(),
-                                            dataDelegatForCards: DataDrinksOnli(
-                                                content: filteredDishes),
-                                            displayDelegate: SectionDisplay(
-                                                viewModel: contentViewModel.sectionViewModel)
-                                    )
-                                }
-                                if categotyManager.currentDishesCategory == .all || categotyManager.currentDishesCategory == .desserts{
-                                    Section(dataDelegatFoSection: SectionDessertStructData(),
-                                            dataDelegatForCards: DataDessertsOnli(
-                                                content: filteredDishes),
-                                            displayDelegate: SectionDisplay(
-                                                viewModel: contentViewModel.sectionViewModel)
-                                    )
-                                }
-                            }.gesture(DragGesture().onChanged { _ in
-                                UIApplication.shared.endEditing(true) // Закрытие клавиатуры при прокрутке
-                            })
+                            VStack{
+                                
+                                SerchField(dataDelegat: SearchFieldData(),
+                                           displaybleDelegate: SearchFiledDisplayable(viewModel: contentViewModel.searchFieldViewModel))
+                                .padding(.top, 20)
+                                
+                                ScrollView{
+                                    
+                                    if categotyManager.currentDishesCategory == .all || categotyManager.currentDishesCategory == .mainFood{
+                                        Section(dataDelegatFoSection: SectionMainStructData(),
+                                                dataDelegatForCards: DataMainFoodsOnli(
+                                                    content: filteredDishes),
+                                                displayDelegate: SectionDisplay(
+                                                    viewModel: contentViewModel.sectionViewModel)
+                                        )
+                                    }
+                                    if categotyManager.currentDishesCategory == .all || categotyManager.currentDishesCategory == .drinks{
+                                        Section(dataDelegatFoSection: SectionDkinksStructData(),
+                                                dataDelegatForCards: DataDrinksOnli(
+                                                    content: filteredDishes),
+                                                displayDelegate: SectionDisplay(
+                                                    viewModel: contentViewModel.sectionViewModel)
+                                        )
+                                    }
+                                    if categotyManager.currentDishesCategory == .all || categotyManager.currentDishesCategory == .desserts{
+                                        Section(dataDelegatFoSection: SectionDessertStructData(),
+                                                dataDelegatForCards: DataDessertsOnli(
+                                                    content: filteredDishes),
+                                                displayDelegate: SectionDisplay(
+                                                    viewModel: contentViewModel.sectionViewModel)
+                                        )
+                                    }
+                                }.gesture(DragGesture().onChanged { _ in
+                                    UIApplication.shared.endEditing(true) // Закрытие клавиатуры при прокрутке
+                                })
+                                
+                            }
                             
                         }.frame(maxWidth: .infinity, maxHeight: .infinity)
                             .ignoresSafeArea()
@@ -140,10 +138,18 @@ class ContentViewModel: ObservableObject{
     var topBarViewModel: TopBarViewModel
     var settingsViewModel: SettingsViewMod
     var filterViewModel: FilterViewModel
+    var searchFieldViewModel: SearchFieldViewModel
     var sectionViewModel: SectionViewMod
     var informationViewModel: InformationViewModel
     
-    init(router: Router, categotyManager: CategoryManager, themeManager: ThemeManager, maxPrice: Binding<Double>, currentDish: Binding<Dish?>) {
+    init(router: Router,
+         categotyManager: CategoryManager,
+         themeManager: ThemeManager,
+         maxPrice: Binding<Double>,
+         currentDish: Binding<Dish?>,
+         allDishes: Binding<[Dish]>,
+         filteredDishes: Binding<[Dish]>,
+         searchingText: Binding<String>) {
         
         // Инициализация ViewModels с переданными зависимостями
         self.topBarViewModel = TopBarViewModel(
@@ -165,6 +171,11 @@ class ContentViewModel: ObservableObject{
             chooseCategoryOfDishesDesserts: {categotyManager.changeCategory(to: .desserts)},
             backToMain: {router.navigate(to: .homeScreen)}
         )
+        
+        self.searchFieldViewModel = SearchFieldViewModel(
+            filteredDishes: filteredDishes,
+            allDish: allDishes,
+            seacrcingText: searchingText)
         
         self.sectionViewModel = SectionViewMod(
             tapOnInfo: {router.navigate(to: .information)},
@@ -214,6 +225,76 @@ class DishDataModel: ObservableObject{
 extension UIApplication {
     func endEditing(_ force: Bool) {
         windows.filter { $0.isKeyWindow }.first?.endEditing(force)
+    }
+}
+
+struct SerchField<Data: DataDelegateForScreen, Delegate: DisplayableDelegate>: View where Data.DataType == Delegate.Content{
+    
+    var dataDelegat: Data
+    var displaybleDelegate: Delegate
+    
+    var body: some View{
+        let data = dataDelegat.fetchData()
+        displaybleDelegate.BuildView(content: data)
+    }
+}
+
+struct SearchFieldData: DataDelegateForScreen{
+    func fetchData() -> String {
+        return "Search for a dish ..."
+    }
+}
+
+struct SearchFiledDisplayable: DisplayableDelegate{
+    @ObservedObject var viewModel: SearchFieldViewModel
+    
+    func BuildView(content: String) -> some View {
+        
+        ZStack{
+            
+            TextField(content, text: viewModel.$searchText)
+                                .padding()
+                                .customBackgroundForObjects()
+                                .foregroundColor(.white)
+                                .cornerRadius(8)
+                                .onChange(of: viewModel.searchText) { _ in
+                                    if viewModel.searchText.isEmpty {
+                                        
+                                        viewModel.filteredDishes  = viewModel.allDish
+                                        
+                                    } else {
+                                        
+                                        viewModel.filteredDishes = viewModel.filterDishesByName(viewModel.allDish, byText: viewModel.searchText)
+                                        
+                                    }
+                                    print(viewModel.$searchText)
+                                }
+                                
+        }
+        .frame(width: 370, height: 30)
+        .customBack()
+        .cornerRadius(5)
+    }
+}
+
+final class SearchFieldViewModel: ObservableObject{
+
+    @Binding var searchText: String
+    @Binding var filteredDishes: [Dish]
+    @Binding var allDish: [Dish]
+    
+    init(filteredDishes: Binding <[Dish]>, allDish: Binding <[Dish]>, seacrcingText: Binding<String>){
+        self._allDish = allDish
+        self._filteredDishes = filteredDishes
+        self._searchText = seacrcingText
+    }
+    
+    func filterDishesByName(_ dishes: [Dish], byText searchingText: String = "") -> [Dish] {
+        if searchingText.isEmpty {
+            return dishes
+        } else {
+            return dishes.filter { $0.name?.localizedCaseInsensitiveContains(searchingText) ?? false }
+        }
     }
 }
 

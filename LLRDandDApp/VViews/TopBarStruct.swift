@@ -66,7 +66,7 @@ struct TopBarDisplayableDelegate: DisplayableDelegate{
     .padding(.top, 40)
     .padding(.bottom, 20)
     .frame(width: 400, height: 120)
-    .background(.gray)
+    .customBackgroundForObjects()
     .cornerRadius(20)
         
     }

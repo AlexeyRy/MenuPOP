@@ -38,7 +38,7 @@ struct SettingsDisplay: DisplayableDelegate{
                 Button(action: viewModel.changeTheme){
                     Text(content.textForButtonTheme)
                 }.customButtonStyle()
-                    .background(.gray)
+                    .customBackgroundForObjects()
                     .foregroundColor(.white)
                     .cornerRadius(10)
                 

@@ -49,16 +49,16 @@ struct FilterDisplay: DisplayableDelegate{
                         Text(content.categoryAll)
                             .customButtonStyle()
                     }
-                        .background(viewModel.isButtonChoosed == .all ? .white : .gray)
-                        .foregroundColor(viewModel.isButtonChoosed == .all ? .black : .white)
+                    .customStylrForChoosedButton(
+                        viewModel.isButtonChoosed == .all ? true: false)
                         .cornerRadius(10)
                         
                     Button(action: viewModel.chooseCategoryOfDishesMain){
                         Text(content.categoryMain)
                             .customButtonStyle()
                     }
-                        .background(viewModel.isButtonChoosed == .mainFood ? .white : .gray)
-                        .foregroundColor(viewModel.isButtonChoosed == .mainFood ? .black : .white)
+                        .customStylrForChoosedButton(
+                            viewModel.isButtonChoosed == .mainFood ? true: false)
                         .cornerRadius(10)
                         
                         
@@ -66,16 +66,16 @@ struct FilterDisplay: DisplayableDelegate{
                         Text(content.categoryDrinks)
                             .customButtonStyle()
                     }
-                        .background(viewModel.isButtonChoosed == .drinks ? .white : .gray)
-                        .foregroundColor(viewModel.isButtonChoosed == .drinks ? .black : .white)
+                    .customStylrForChoosedButton(
+                        viewModel.isButtonChoosed == .drinks ? true: false)
                         .cornerRadius(10)
                         
                     Button(action: viewModel.chooseCategoryOfDishesDesserts){
                         Text(content.categoryDessert)
                             .customButtonStyle()
                     }
-                        .background(viewModel.isButtonChoosed == .desserts ? .white : .gray)
-                        .foregroundColor(viewModel.isButtonChoosed == .desserts ? .black : .white)
+                        .customStylrForChoosedButton(
+                            viewModel.isButtonChoosed == .desserts ? true: false)
                         .cornerRadius(10)
                         
                 }.padding(.bottom, 20)
