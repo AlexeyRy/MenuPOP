@@ -27,16 +27,19 @@ final class Router: ObservableObject{
             currentTopBarData = DataForTopBarFiltration()
         case .information:
             currentTopBarData = DataForTopBarInfo()
+        case .addPosition:
+            currentTopBarData = DataForTopBarAddPosition()
         }
     }
 }
 
-
+// Список скринов для роутера
 enum Screen{
     case homeScreen
     case filtreationScreen
     case settingsScreen
     case information
+    case addPosition
 }
 
 final class CategoryManager: ObservableObject{

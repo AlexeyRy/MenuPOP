@@ -8,6 +8,9 @@
 import Foundation
 import CoreData
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///Структура и реализация контента только для верхнего бара
 struct DataStructForTopBar{
     let title: String
     let settingsImage: String
@@ -50,7 +53,23 @@ struct DataForTopBarInfo: DataDelegatForTopBarOnli{
     }
 }
 
+struct DataForTopBarAddPosition: DataDelegatForTopBarOnli{
+    func fetchData() -> DataStructForTopBar {
+        return DataStructForTopBar(title: "Add a new position",
+                                   settingsImage: "gear",
+                                   filterImage: "line.3.horizontal.decrease")
+    }
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///Структура с контентом только для поисковой строки
+struct SearchFieldData: DataDelegateForScreen{
+    func fetchData() -> String {
+        return "Search for a dish ..."
+    }
+}
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///Структура и реализация контента для информационного окна
 //Создаём структуру данных необходимых для меню фильтрации
 struct DataStructForFilter{
     let category: String
@@ -76,6 +95,8 @@ struct FilterData: DataDelegateForScreen{
         )
     }
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///Структура и реализация контента для меню натроик
 
 struct SettingsDataStruct{
     let mainText: String
@@ -90,9 +111,10 @@ struct SettingsData: DataDelegateForScreen{
                                   textForBackButton: "Accept")
     }
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Реализация контента для каждой вкласдки с едой
 
 // Создаём контент для разных вкладок еды
-
 struct SectionMainStructData: DataDelegateForScreen{
     func fetchData() -> String {
         return "Main"
@@ -110,14 +132,13 @@ struct SectionDessertStructData: DataDelegateForScreen{
         return "Deserts"
     }
 }
-
-//Обробатываем дату для страницы еды
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///Обробатываем дату для страницы еды и реализовываем данные для позиций меню
 
 struct DataMainFoodsOnli: DataDelgatForCardsCore{
     var content: [Dish]
     func fetchData() -> [Dish] {
         let mainDishes = content.filter{$0.fromDishCategory.name == "Main Food"}
-        print(mainDishes)
         return mainDishes
     }
 }
@@ -126,7 +147,6 @@ struct DataDrinksOnli: DataDelgatForCardsCore{
     var content: [Dish]
     func fetchData() -> [Dish] {
         let drinks = content.filter{$0.fromDishCategory.name == "Drinks"}
-        print(drinks)
         return drinks
     }
 }
@@ -135,10 +155,11 @@ struct DataDessertsOnli: DataDelgatForCardsCore{
     var content: [Dish]
     func fetchData() -> [Dish] {
         let desserts = content.filter{$0.fromDishCategory.name == "Desserts"}
-        print(desserts)
         return desserts
     }
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/// Структура и реализация контента на информационной странце
 
 struct DataForInfoScreen{
     let nameForPicture: String
@@ -153,15 +174,10 @@ struct ContentForInfoPage: DataDelegateForScreen{
 }
 
 struct DishCardData: DataDelgatForDishInfo{
-    
     let DishInfoForSrcreen: Dish
+    
     func fetchData() -> Dish {
         return DishInfoForSrcreen
     }
 }
-
-func FilterForFoodCore(_ dishes: [Dish], _ maxPrice: Double) -> [Dish]{
-    print(dishes)
-    return dishes.filter{ $0.price <= maxPrice }
-}
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

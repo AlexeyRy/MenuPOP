@@ -13,6 +13,8 @@ struct LLRDandDAppApp: App {
     @StateObject private var router = Router()
     @StateObject private var themeManger = ThemeManager()
     @StateObject private var categoryManager = CategoryManager()
+    @StateObject private var dataProcessor: DataProcessor
+    @StateObject private var dataModel: DishDataModel
        
     let persistenceController = PersistenceController.shared
     
@@ -27,16 +29,22 @@ struct LLRDandDAppApp: App {
         }catch{
             print("Ошибка при загрузке данных \(error.localizedDescription)")
         }
+        
+        let dataModel = DishDataModel(context: context)
+        _dataModel = StateObject(wrappedValue: dataModel)
+        _dataProcessor = StateObject(wrappedValue: DataProcessor(fetcher: dataModel))
     }
     
 
     
     var body: some Scene {
         WindowGroup {
-            ContentView(context: persistenceController.container.viewContext)
+            ContentView()
                 .environmentObject(router)
                 .environmentObject(themeManger)
                 .environmentObject(categoryManager)
+                .environmentObject(dataModel)
+                .environmentObject(dataProcessor)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
             
         }

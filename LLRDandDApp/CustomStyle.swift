@@ -10,6 +10,7 @@ import SwiftUI
 
 // Здесь создаём кастомное отображение кнопок, через встроенный протокол ViewModifier
 
+// Реализация отображения маленьких кнопок на странице настроек и на странице 
 struct CustomStyleModifierSmallBatton: ViewModifier {
     @EnvironmentObject var themeManager: ThemeManager
     func body(content: Content) -> some View {
