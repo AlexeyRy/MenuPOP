@@ -13,8 +13,9 @@ struct LLRDandDAppApp: App {
     @StateObject private var router = Router()
     @StateObject private var themeManger = ThemeManager()
     @StateObject private var categoryManager = CategoryManager()
-    @StateObject private var dataProcessor: DataProcessor
+    @StateObject private var dataSH: DataSH
     @StateObject private var dataModel: DishDataModel
+    @StateObject private var dataProcessing: DataProcessing
        
     let persistenceController = PersistenceController.shared
     
@@ -31,8 +32,9 @@ struct LLRDandDAppApp: App {
         }
         
         let dataModel = DishDataModel(context: context)
+        _dataProcessing = StateObject(wrappedValue: DataProcessing(context: context))
         _dataModel = StateObject(wrappedValue: dataModel)
-        _dataProcessor = StateObject(wrappedValue: DataProcessor(fetcher: dataModel))
+        _dataSH = StateObject(wrappedValue: DataSH(fetcher: dataModel))
     }
     
 
@@ -44,7 +46,8 @@ struct LLRDandDAppApp: App {
                 .environmentObject(themeManger)
                 .environmentObject(categoryManager)
                 .environmentObject(dataModel)
-                .environmentObject(dataProcessor)
+                .environmentObject(dataSH)
+                .environmentObject(dataProcessing)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
             
         }

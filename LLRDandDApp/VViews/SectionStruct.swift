@@ -12,6 +12,7 @@ import SwiftUI
 // Структура, которая собирает отображения из полученных делегатов. В нашем кейсе их три. Делегат отображения, делегат даты для карт, делегат контента самой секции
 
 struct Section<Delegate: DisplayableDelegateMulti, Data: DataDelegateForScreen>: View where Delegate.Content == [Dish], Delegate.Content2 == Data.DataType{
+    
     let dataDelegatFoSection: Data
     let dataDelegatForCards: DataDelgatForCardsCore
     
@@ -43,24 +44,50 @@ struct SectionDisplay: DisplayableDelegateMulti{
                     .customText()
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))]){
                     ForEach(cardContent, id: \.id){item in
-                        
-                        Button(action:{
-                            UIApplication.shared.endEditing(true)
-                            viewModel.currentDish = item
-                            viewModel.tapOnInfo()
-                        } , label: {
-                            ZStack{
-                                Text(item.name ?? "Unknown")
-                                        .foregroundColor(.white)
-                                        .fontWeight(.bold)
-                                
-                                    
+
+                            Button(action:{
+                                if !viewModel.isLongTapActice {
+                                    UIApplication.shared.endEditing(true)
+                                    viewModel.showDeleteOption = false
+                                    viewModel.currentDish = item
+                                    viewModel.tapOnInfo()
+                                }
+                            }, label: {
+                                ZStack{
+                                    if viewModel.showDeleteOption == true{
+                                        Image(systemName: "minus.circle.fill")
+                                            .font(.largeTitle)
+                                            .foregroundColor(.red)
+                                    }else{
+                                        Text(item.name ?? "Unknown")
+                                            .foregroundColor(.white)
+                                            .fontWeight(.bold)
+                                    }
                                 }.frame(width: 100, height: 100)
                                     .customBackgroundForObjects()
                                     .cornerRadius(10)
                                     .padding(.bottom, 20)
-                            
-                        })
+                                }
+                                
+                            ).simultaneousGesture(
+                                LongPressGesture(minimumDuration: 1.0)
+                                    .onEnded{ _ in
+                                        withAnimation {
+                                            DispatchQueue.main.async {
+                                                viewModel.isLongTapActice = true
+                                                viewModel.showDeleteOption = true
+                                                
+                                                print("Show delete wondow \(viewModel.showDeleteOption)")
+                                                print("isLongTap: \(viewModel.isLongTapActice)")
+                                            }
+                                        }
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                            viewModel.isLongTapActice = false
+                                            print("isLongTapIn 1.5 seconds: \(viewModel.isLongTapActice)")
+                                            print("Show delete wondow in 1.5 seconds:  \(viewModel.showDeleteOption)")
+                                        }
+                                    }
+                            )
                         
                     }
                 }
@@ -72,14 +99,20 @@ struct SectionDisplay: DisplayableDelegateMulti{
 
 // Модель функций страницы. В ней мы создаём два обьекта. Это биндиговую переменную для подсасывания даты для последующей передачи в навигации и функционал переключения между экранами
 final class SectionViewMod: ObservableObject{
+    @Published var isLongTapActice: Bool
+    @Published var showDeleteOption: Bool
+    @Published var currentDish: Dish?
     
-    @Binding var currentDish: Dish?
-    let tapOnInfo: () -> Void
+    var tapOnInfo: () -> Void
+    var dataProcessing: DataProcessing
     
     init(tapOnInfo: @escaping () -> Void,
-         currentDish: Binding<Dish?>) {
+         dataProcessing: DataProcessing
+    ) {
+        self.isLongTapActice = false
+        self.showDeleteOption = false
         self.tapOnInfo = tapOnInfo
-        self._currentDish = currentDish
+        self.dataProcessing = dataProcessing
     }
     //func buildView(content: Dishes) -> some View{
         

@@ -18,9 +18,15 @@ class DishDataModel: ObservableObject{
         fetchDishes(context: context)
     }
     
-    func fetchDishes(context: NSManagedObjectContext){
+    func fetchDishes(context: NSManagedObjectContext,
+                     for dishCategory: String = "All"){
         let request: NSFetchRequest<Dish> = Dish.fetchRequest() as! NSFetchRequest<Dish>
-        request.predicate = NSPredicate(value: true)
+        
+        if dishCategory != "All" {
+            request.predicate = NSPredicate(format: "ANY fromDishCategory.name ==[cd] %@", dishCategory)
+        }else{
+            request.predicate = NSPredicate(value: true)
+        }
 
         do{
             dishes = try context.fetch(request)
@@ -32,8 +38,8 @@ class DishDataModel: ObservableObject{
     
 }
 
-// Класс занимающийся только фильттрацией и работай над кэшированными данными из базы данных
-class DataProcessor: ObservableObject{
+// Класс занимающийся только фильттрацией и работай над кэшированными данными из базы данных SH = Storage and Handling
+class DataSH: ObservableObject{
     @Published var filteredDishes: [Dish] = []
     @Published var searchText: String = ""
     @Published var maxPrice: Double = 60.00

@@ -15,20 +15,25 @@ struct ContentView: View {
     
     
     @EnvironmentObject var dataModel: DishDataModel
-    @EnvironmentObject var dataProcessor: DataProcessor
+    @EnvironmentObject var dataSH: DataSH
     @EnvironmentObject var router: Router
     @EnvironmentObject var categotyManager: CategoryManager
     @EnvironmentObject var themeManager: ThemeManager
+    @EnvironmentObject var dataProcesing: DataProcessing
     
     @State var currentDish: Dish?
+    
+    @StateObject var sectionViewModel = SectionViewMod(tapOnInfo: {},
+                                                       dataProcessing: DataProcessing(context: NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)))
     
     var body: some View {
 
         let contentViewModel = ContentViewModel(router: router,
                                                 categotyManager: categotyManager,
                                                 themeManager: themeManager,
-                                                maxPrice: $dataProcessor.maxPrice,
-                                                currentDish: $currentDish)
+                                                maxPrice: $dataSH.maxPrice,
+                                                currentDish: $currentDish,
+                                                dataProcessing: dataProcesing)
         
         
                 VStack {
@@ -55,9 +60,8 @@ struct ContentView: View {
                                         viewModel: contentViewModel.filterViewModel
                                     )
                                 ).environmentObject(router)
-                                    .onChange(of: dataProcessor.maxPrice){ _ in
-                                        print("Хуй размером: \(dataProcessor.maxPrice)")
-                                        dataProcessor.filterDishesByPrice()
+                                    .onChange(of: dataSH.maxPrice){ _ in
+                                        dataSH.filterDishesByPrice()
                                     },// Передаём поведение при изменение окна при вызыве обработчика, так как внутри не работает
                                 tag: .filtreationScreen,
                                 selection: $router.currentScreen,
@@ -66,7 +70,7 @@ struct ContentView: View {
                             
                             NavigationLink(destination: Info(
                                 dataDelegatFoSection: ContentForInfoPage(),
-                                dataDelegatForCards: DishCardData(DishInfoForSrcreen: currentDish ?? Dish()),
+                                dataDelegatForCards: DishCardData(DishInfoForSrcreen: sectionViewModel.currentDish ?? Dish()),
                                 displayDelegate: InfoDisplay(viewModel: contentViewModel.informationViewModel)
                                 ),
                                            tag: .information,
@@ -76,11 +80,11 @@ struct ContentView: View {
                             
                             VStack{
                                 
-                                SearchField(dataDelegat: SearchFieldData(), displaybleDelegate: SearchFiledDisplayable(viewModel: dataProcessor))
+                                SearchField(dataDelegat: SearchFieldData(), displaybleDelegate: SearchFiledDisplayable(viewModel: dataSH))
                                     .padding(.top, 20)
-                                    .onChange(of: dataProcessor.searchText){_ in
-                                        print("Хуй \(dataProcessor.searchText)")
-                                        dataProcessor.filterDishesByName(dataProcessor.searchText)
+                                    .onChange(of: dataSH.searchText){_ in
+                                        
+                                        dataSH.filterDishesByName(dataSH.searchText)
                                     }
                                 
                                 ScrollView{
@@ -88,27 +92,24 @@ struct ContentView: View {
                                     if categotyManager.currentDishesCategory == .all || categotyManager.currentDishesCategory == .mainFood{
                                         Section(dataDelegatFoSection: SectionMainStructData(),
                                                 dataDelegatForCards: DataMainFoodsOnli(
-                                                    content: dataProcessor.filteredDishes),
-                                                displayDelegate: SectionDisplay(
-                                                    viewModel: contentViewModel.sectionViewModel)
+                                                    content: dataSH.filteredDishes),
+                                                displayDelegate: SectionDisplay(viewModel: sectionViewModel)
                                         )
                                     }
                                     
                                     if categotyManager.currentDishesCategory == .all || categotyManager.currentDishesCategory == .drinks{
                                         Section(dataDelegatFoSection: SectionDkinksStructData(),
                                                 dataDelegatForCards: DataDrinksOnli(
-                                                    content: dataProcessor.filteredDishes),
-                                                displayDelegate: SectionDisplay(
-                                                    viewModel: contentViewModel.sectionViewModel)
+                                                    content: dataSH.filteredDishes),
+                                                displayDelegate: SectionDisplay(viewModel: sectionViewModel)
                                         )
                                     }
                                     
                                     if categotyManager.currentDishesCategory == .all || categotyManager.currentDishesCategory == .desserts{
                                         Section(dataDelegatFoSection: SectionDessertStructData(),
                                                 dataDelegatForCards: DataDessertsOnli(
-                                                    content: dataProcessor.filteredDishes),
-                                                displayDelegate: SectionDisplay(
-                                                    viewModel: contentViewModel.sectionViewModel)
+                                                    content: dataSH.filteredDishes),
+                                                displayDelegate: SectionDisplay(viewModel: sectionViewModel)
                                         )
                                     }
                                 }.gesture(DragGesture().onChanged { _ in
@@ -123,6 +124,9 @@ struct ContentView: View {
                     }
                     Spacer()
                 }.onAppear {
+                    sectionViewModel.tapOnInfo = {router.navigate(to: .information)}
+                    sectionViewModel.dataProcessing = dataProcesing
+                    
                     dataModel.fetchDishes(context: viewContext)
                 }
 
@@ -134,17 +138,18 @@ struct ContentView: View {
 
 class ContentViewModel: ObservableObject{
     
-    var topBarViewModel: TopBarViewModel
-    var settingsViewModel: SettingsViewMod
-    var filterViewModel: FilterViewModel
-    var sectionViewModel: SectionViewMod
-    var informationViewModel: InformationViewModel
+    @ObservedObject var topBarViewModel: TopBarViewModel
+    @ObservedObject var settingsViewModel: SettingsViewMod
+    @ObservedObject var filterViewModel: FilterViewModel
+    @ObservedObject var informationViewModel: InformationViewModel
     
     init(router: Router,
          categotyManager: CategoryManager,
          themeManager: ThemeManager,
          maxPrice: Binding<Double>,
-         currentDish: Binding<Dish?>) {
+         currentDish: Binding<Dish?>,
+         dataProcessing: DataProcessing
+    ) {
 
         // Инициализация ViewModels с переданными зависимостями
         self.topBarViewModel = TopBarViewModel(
@@ -165,11 +170,6 @@ class ContentViewModel: ObservableObject{
             chooseCategoryOfDishesDrinks: {categotyManager.changeCategory(to: .drinks)},
             chooseCategoryOfDishesDesserts: {categotyManager.changeCategory(to: .desserts)},
             backToMain: {router.navigate(to: .homeScreen)}
-        )
-        
-        self.sectionViewModel = SectionViewMod(
-            tapOnInfo: {router.navigate(to: .information)},
-            currentDish: currentDish
         )
         
         self.informationViewModel = InformationViewModel(

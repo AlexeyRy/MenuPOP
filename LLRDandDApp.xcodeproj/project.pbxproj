@@ -10,6 +10,7 @@
 		F6149DC72D16D4C100DF7CE2 /* SearchStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6149DC62D16D4C100DF7CE2 /* SearchStruct.swift */; };
 		F6149DC92D16EAC500DF7CE2 /* RequestAndProcessing.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6149DC82D16EAC500DF7CE2 /* RequestAndProcessing.swift */; };
 		F6149DCD2D16F0BF00DF7CE2 /* DishInformationStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6149DCC2D16F0BF00DF7CE2 /* DishInformationStruct.swift */; };
+		F6149DCF2D17B51F00DF7CE2 /* AddPositionStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6149DCE2D17B51F00DF7CE2 /* AddPositionStruct.swift */; };
 		F64F69F72D11126700385C9D /* LLRDandD.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = F64F69F52D11126700385C9D /* LLRDandD.xcdatamodeld */; };
 		F66014672D05A4F4000E6CBD /* Router.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66014662D05A4F4000E6CBD /* Router.swift */; };
 		F66014692D06802C000E6CBD /* DataForView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F66014682D06802C000E6CBD /* DataForView.swift */; };
@@ -52,6 +53,7 @@
 		F6149DC62D16D4C100DF7CE2 /* SearchStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchStruct.swift; sourceTree = "<group>"; };
 		F6149DC82D16EAC500DF7CE2 /* RequestAndProcessing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestAndProcessing.swift; sourceTree = "<group>"; };
 		F6149DCC2D16F0BF00DF7CE2 /* DishInformationStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DishInformationStruct.swift; sourceTree = "<group>"; };
+		F6149DCE2D17B51F00DF7CE2 /* AddPositionStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPositionStruct.swift; sourceTree = "<group>"; };
 		F64F69F62D11126700385C9D /* LLRDandD.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = LLRDandD.xcdatamodel; sourceTree = "<group>"; };
 		F66014662D05A4F4000E6CBD /* Router.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Router.swift; sourceTree = "<group>"; };
 		F66014682D06802C000E6CBD /* DataForView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataForView.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 		F6E425932D07D95A00931180 /* VViews */ = {
 			isa = PBXGroup;
 			children = (
+				F6149DCE2D17B51F00DF7CE2 /* AddPositionStruct.swift */,
 				F6995A532D04362A00F96976 /* TopBarStruct.swift */,
 				F6149DC62D16D4C100DF7CE2 /* SearchStruct.swift */,
 				F660146C2D068247000E6CBD /* FilterStruct.swift */,
@@ -327,6 +330,7 @@
 				F6E425902D07D6E500931180 /* CustomStyle.swift in Sources */,
 				F6995A522D0418CC00F96976 /* Protocols.swift in Sources */,
 				F6995A2A2D04090500F96976 /* ContentView.swift in Sources */,
+				F6149DCF2D17B51F00DF7CE2 /* AddPositionStruct.swift in Sources */,
 				F66014692D06802C000E6CBD /* DataForView.swift in Sources */,
 				F66014672D05A4F4000E6CBD /* Router.swift in Sources */,
 				F64F69F72D11126700385C9D /* LLRDandD.xcdatamodeld in Sources */,

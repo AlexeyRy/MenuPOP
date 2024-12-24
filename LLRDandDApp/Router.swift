@@ -7,8 +7,8 @@
 
 import Foundation
 
-
-// создаём роутер, который на данный момент отвечает за мену и экранов и категории
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// создаём роутер, который отвечает за смену и экранов
 final class Router: ObservableObject{
     @Published var currentScreen: Screen? = .homeScreen
     @Published var currentTopBarData: DataDelegatForTopBarOnli = DataForTopBarMenu()
@@ -41,12 +41,24 @@ enum Screen{
     case information
     case addPosition
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Класс отвечающий за выбранную категорию
 final class CategoryManager: ObservableObject{
     @Published var currentDishesCategory: Category? = .all
+    @Published var nameOFCurrentCategory: String = "All"
     
     func changeCategory(to category: Category){
         self.currentDishesCategory = category
+        switch category.self{
+        case .all:
+            nameOFCurrentCategory = "All"
+        case .mainFood:
+            nameOFCurrentCategory = "Main Food"
+        case .drinks:
+            nameOFCurrentCategory = "Drinks"
+        case .desserts:
+            nameOFCurrentCategory = "Desserts"
+        }
     }
 }
 

@@ -8,25 +8,6 @@
 import Foundation
 import SwiftUI
 
-struct PageStruct{
-    let title: String?
-    let mainText: String?
-}
-
-struct DataForAnyPage: DataDelegate{ // Условная универсальная конструкция, которая может использоваться для любого текста. По иронии при использовании мы теряем контроль за данными
-    typealias DataType = PageStruct
-    
-    let title: String
-    let mainText: String
-    
-    // передача данных неоходимых для любой страницы или заголовка.
-    func fetchData(content: PageStruct) -> PageStruct{
-        return PageStruct(title: title, mainText: mainText)
-    }
-    
-}
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///Реализовываю Верхнюю менюшку
 // Создаём структура, которая на вход получает два протокола (делегата): данные страницы, отображение данных на странице
@@ -82,4 +63,4 @@ final class TopBarViewModel: ObservableObject{
         self.onFilterTap = onFilterTap
     }
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

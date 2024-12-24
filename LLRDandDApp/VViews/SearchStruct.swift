@@ -24,7 +24,7 @@ struct SearchField<Data: DataDelegateForScreen, Delegate: DisplayableDelegate>: 
 
 // Структура отображения обьекта поисковой страницы
 struct SearchFiledDisplayable: DisplayableDelegate{
-    @ObservedObject var viewModel: DataProcessor
+    @ObservedObject var viewModel: DataSH
     
     func BuildView(content: String) -> some View {
         
