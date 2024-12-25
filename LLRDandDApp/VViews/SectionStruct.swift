@@ -51,7 +51,7 @@ struct SectionDisplay: DisplayableDelegateMulti{
                                     viewModel.currentDish = item
                                     viewModel.tapOnInfo()
                                 }else{
-                                    if viewModel.confirmDelete == true{
+                                    if viewModel.confirmDelete == true && viewModel.currentDish == item{
                                         viewModel.dataProcessing.deletePosition(viewModel.currentDish ?? item)
                                         viewModel.confirmDelete = false
                                         viewModel.isLongTapActice = false
