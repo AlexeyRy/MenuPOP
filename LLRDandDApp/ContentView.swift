@@ -22,9 +22,14 @@ struct ContentView: View {
     @EnvironmentObject var dataProcesing: DataProcessing
     
     @State var currentDish: Dish?
+    @State var isLongPress: Bool = false
+    @State var showDelete: Bool = false
     
-    @StateObject var sectionViewModel = SectionViewMod(tapOnInfo: {},
-                                                       dataProcessing: DataProcessing(context: NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)))
+    /*@StateObject var sectionViewModel = SectionViewMod(tapOnInfo: {},
+                                                       dataProcessing: DataProcessing(context: NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)),
+                                                       isLongTapActive: .constant(false),
+                                                       showDeleteOption: .constant(false)
+    )*/
     
     var body: some View {
 
@@ -33,7 +38,9 @@ struct ContentView: View {
                                                 themeManager: themeManager,
                                                 maxPrice: $dataSH.maxPrice,
                                                 currentDish: $currentDish,
-                                                dataProcessing: dataProcesing)
+                                                dataProcessing: dataProcesing,
+                                                showDelete: $showDelete,
+                                                isLongPress: $isLongPress)
         
         
                 VStack {
@@ -70,7 +77,7 @@ struct ContentView: View {
                             
                             NavigationLink(destination: Info(
                                 dataDelegatFoSection: ContentForInfoPage(),
-                                dataDelegatForCards: DishCardData(DishInfoForSrcreen: sectionViewModel.currentDish ?? Dish()),
+                                dataDelegatForCards: DishCardData(DishInfoForSrcreen: currentDish ?? Dish()),
                                 displayDelegate: InfoDisplay(viewModel: contentViewModel.informationViewModel)
                                 ),
                                            tag: .information,
@@ -93,7 +100,7 @@ struct ContentView: View {
                                         Section(dataDelegatFoSection: SectionMainStructData(),
                                                 dataDelegatForCards: DataMainFoodsOnli(
                                                     content: dataSH.filteredDishes),
-                                                displayDelegate: SectionDisplay(viewModel: sectionViewModel)
+                                                displayDelegate: SectionDisplay(viewModel: contentViewModel.sectionViewModel)
                                         )
                                     }
                                     
@@ -101,7 +108,7 @@ struct ContentView: View {
                                         Section(dataDelegatFoSection: SectionDkinksStructData(),
                                                 dataDelegatForCards: DataDrinksOnli(
                                                     content: dataSH.filteredDishes),
-                                                displayDelegate: SectionDisplay(viewModel: sectionViewModel)
+                                                displayDelegate: SectionDisplay(viewModel: contentViewModel.sectionViewModel)
                                         )
                                     }
                                     
@@ -109,7 +116,7 @@ struct ContentView: View {
                                         Section(dataDelegatFoSection: SectionDessertStructData(),
                                                 dataDelegatForCards: DataDessertsOnli(
                                                     content: dataSH.filteredDishes),
-                                                displayDelegate: SectionDisplay(viewModel: sectionViewModel)
+                                                displayDelegate: SectionDisplay(viewModel: contentViewModel.sectionViewModel)
                                         )
                                     }
                                 }.gesture(DragGesture().onChanged { _ in
@@ -124,10 +131,15 @@ struct ContentView: View {
                     }
                     Spacer()
                 }.onAppear {
+                    /*
+                    sectionViewModel.isLongTapActice = $isLongPress
+                    sectionViewModel.showDeleteOption = $showDelete
                     sectionViewModel.tapOnInfo = {router.navigate(to: .information)}
                     sectionViewModel.dataProcessing = dataProcesing
+                     */
                     
                     dataModel.fetchDishes(context: viewContext)
+                     
                 }
 
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -142,13 +154,16 @@ class ContentViewModel: ObservableObject{
     @ObservedObject var settingsViewModel: SettingsViewMod
     @ObservedObject var filterViewModel: FilterViewModel
     @ObservedObject var informationViewModel: InformationViewModel
+    @ObservedObject var sectionViewModel: SectionViewMod
     
     init(router: Router,
          categotyManager: CategoryManager,
          themeManager: ThemeManager,
          maxPrice: Binding<Double>,
          currentDish: Binding<Dish?>,
-         dataProcessing: DataProcessing
+         dataProcessing: DataProcessing,
+         showDelete: Binding<Bool>,
+         isLongPress: Binding<Bool>
     ) {
 
         // Инициализация ViewModels с переданными зависимостями
@@ -174,6 +189,14 @@ class ContentViewModel: ObservableObject{
         
         self.informationViewModel = InformationViewModel(
             backToMain: {router.navigate(to: .homeScreen)}
+        )
+        
+        self.sectionViewModel = SectionViewMod(
+            tapOnInfo: {router.navigate(to: .information)},
+            dataProcessing: dataProcessing,
+            isLongTapActive: isLongPress,
+            showDeleteOption: showDelete,
+            currentDish: currentDish
         )
     }
 }

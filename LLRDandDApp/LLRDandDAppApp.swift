@@ -16,6 +16,8 @@ struct LLRDandDAppApp: App {
     @StateObject private var dataSH: DataSH
     @StateObject private var dataModel: DishDataModel
     @StateObject private var dataProcessing: DataProcessing
+    
+    
        
     let persistenceController = PersistenceController.shared
     

@@ -12,7 +12,6 @@ import SwiftUI
 // Структура, которая собирает отображения из полученных делегатов. В нашем кейсе их три. Делегат отображения, делегат даты для карт, делегат контента самой секции
 
 struct Section<Delegate: DisplayableDelegateMulti, Data: DataDelegateForScreen>: View where Delegate.Content == [Dish], Delegate.Content2 == Data.DataType{
-    
     let dataDelegatFoSection: Data
     let dataDelegatForCards: DataDelgatForCardsCore
     
@@ -51,40 +50,58 @@ struct SectionDisplay: DisplayableDelegateMulti{
                                     viewModel.showDeleteOption = false
                                     viewModel.currentDish = item
                                     viewModel.tapOnInfo()
+                                }else{
+                                    if viewModel.confirmDelete == true{
+                                        viewModel.dataProcessing.deletePosition(viewModel.currentDish ?? item)
+                                        viewModel.confirmDelete = false
+                                        viewModel.isLongTapActice = false
+                                    }else{
+                                        viewModel.confirmDelete = true
+                                    }
                                 }
                             }, label: {
                                 ZStack{
-                                    if viewModel.showDeleteOption == true{
-                                        Image(systemName: "minus.circle.fill")
-                                            .font(.largeTitle)
-                                            .foregroundColor(.red)
+                                    if viewModel.isLongTapActice == true{
+                                        if viewModel.currentDish == item{
+                                            Image(systemName: "minus.circle.fill")
+                                                .font(.largeTitle)
+                                                .foregroundColor(.red)
+                                                .frame(width: 100, height: 100)
+                                                .customBackgroundForObjects()
+                                                .cornerRadius(10)
+                                        }else{
+                                            Text(item.name ?? "Unknown")
+                                                .foregroundColor(.white)
+                                                .fontWeight(.bold)
+                                                .frame(width: 100, height: 100)
+                                                .customBackgroundForObjects()
+                                                .cornerRadius(10)
+                                        }
                                     }else{
                                         Text(item.name ?? "Unknown")
                                             .foregroundColor(.white)
                                             .fontWeight(.bold)
+                                            .frame(width: 100, height: 100)
+                                            .customBackgroundForObjects()
+                                            .cornerRadius(10)
+                                        }
                                     }
-                                }.frame(width: 100, height: 100)
-                                    .customBackgroundForObjects()
-                                    .cornerRadius(10)
-                                    .padding(.bottom, 20)
                                 }
                                 
                             ).simultaneousGesture(
-                                LongPressGesture(minimumDuration: 1.0)
+                                LongPressGesture(minimumDuration: 0.5)
                                     .onEnded{ _ in
                                         withAnimation {
                                             DispatchQueue.main.async {
                                                 viewModel.isLongTapActice = true
-                                                viewModel.showDeleteOption = true
-                                                
-                                                print("Show delete wondow \(viewModel.showDeleteOption)")
+                                                viewModel.currentDish = item
                                                 print("isLongTap: \(viewModel.isLongTapActice)")
                                             }
                                         }
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                                             viewModel.isLongTapActice = false
+                                            viewModel.confirmDelete = false
                                             print("isLongTapIn 1.5 seconds: \(viewModel.isLongTapActice)")
-                                            print("Show delete wondow in 1.5 seconds:  \(viewModel.showDeleteOption)")
                                         }
                                     }
                             )
@@ -99,18 +116,23 @@ struct SectionDisplay: DisplayableDelegateMulti{
 
 // Модель функций страницы. В ней мы создаём два обьекта. Это биндиговую переменную для подсасывания даты для последующей передачи в навигации и функционал переключения между экранами
 final class SectionViewMod: ObservableObject{
-    @Published var isLongTapActice: Bool
-    @Published var showDeleteOption: Bool
-    @Published var currentDish: Dish?
+    @Published var confirmDelete: Bool = false
+    @Binding var isLongTapActice: Bool
+    @Binding var showDeleteOption: Bool
+    @Binding var currentDish: Dish?
     
     var tapOnInfo: () -> Void
     var dataProcessing: DataProcessing
     
     init(tapOnInfo: @escaping () -> Void,
-         dataProcessing: DataProcessing
+         dataProcessing: DataProcessing,
+         isLongTapActive: Binding<Bool>,
+         showDeleteOption: Binding<Bool>,
+         currentDish: Binding<Dish?>
     ) {
-        self.isLongTapActice = false
-        self.showDeleteOption = false
+        self._isLongTapActice = isLongTapActive
+        self._showDeleteOption = showDeleteOption
+        self._currentDish = currentDish
         self.tapOnInfo = tapOnInfo
         self.dataProcessing = dataProcessing
     }
